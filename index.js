@@ -24,14 +24,13 @@ const reviews = [
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
-// index
+// index-----------
 app.get('/api/professors', (req, res) => {
   res.json(professors);
 });
 // show
 app.get('/api/professors/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(id);
   const professor = professors.find(professor => professor.id === id)
   res.json(professor);
 });
@@ -50,15 +49,35 @@ app.post('/api/professors', (req, res) => {
     school: Joi.string().required(),
     department: Joi.string().required(),
   };
+
+  const professor = {
+    id: professors.length + 1,
+    name: req.body.name,
+    title: req.body.title,
+    school: req.body.school,
+    department: req.body.department,
+  };
+
+  professors.push(professor);
+  res.json(professor);
 });
 
+// delete
+app.delete('/api/professors/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = professors.findIndex(professor => professor.id === id);
+  const professor = professors[index];
+  professors.splice(index, 1);
+
+  res.json(professor);
+});
 
 
 // CRUD REVIEWS************************************
 
 // index
 app.get('/api/reviews', (req, res) => {
-  res.send([1,2,3,4,5]);
+  res.json(reviews);
 });
 // show
 app.get('/api/reviews/:id', (req, res) => {
